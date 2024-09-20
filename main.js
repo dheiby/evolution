@@ -1,91 +1,123 @@
-document.addEventListener("DOMContentLoaded", function() {
-    var startDateInput = document.getElementById("startDate");
-    var endDateInput = document.getElementById("endDate");
-    var consultarBtn = document.getElementById("consultarBtn");
-
-    // Inicializar Flatpickr con formato de 24 horas y validación
-    var startPicker = flatpickr(startDateInput, {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",  // Formato de fecha/hora compatible
-        time_24hr: true
+require(["esri/Map", "esri/views/MapView", "esri/Graphic"], function(Map, MapView, Graphic) {
+    const map = new Map({
+        basemap: "topo-vector"
     });
 
-    var endPicker = flatpickr(endDateInput, {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",  // Formato de fecha/hora compatible
-        time_24hr: true
+    const view = new MapView({
+        container: "map",
+        map: map,
+        center: [-74.08175, 4.60971], // Coordenadas de Bogotá
+        zoom: 12
     });
 
-    // Función para convertir fecha a timestamp
-    function toTimestamp(dateStr) {
-        var date = new Date(dateStr);
-        return date.getTime(); // Retorna el valor de la fecha en milisegundos
-    }
+    document.getElementById('consultarBtn').addEventListener('click', function() {
+        const fechaHoraInicio = document.getElementById('fechaInicio').value;
+        const fechaHoraFin = document.getElementById('fechaFin').value;
 
-    // Al hacer clic en el botón de consulta
-    consultarBtn.addEventListener("click", function() {
-        var startDate = new Date(startDateInput.value);
-        var endDate = new Date(endDateInput.value);
-
-        // Convertir fechas a timestamp
-        var startDateTimestamp = toTimestamp(startDate);
-        var endDateTimestamp = toTimestamp(endDate);
-
-        // Validar que la fecha inicial sea menor que la fecha final
-        if (startDate >= endDate) {
-            alert("La fecha y hora inicial debe ser menor que la fecha y hora final.");
+        if (!fechaHoraInicio || !fechaHoraFin) {
+            alert("Por favor, selecciona ambas fechas.");
             return;
         }
 
-        // Imprimir en consola las fechas seleccionadas
-        console.log("Fecha inicial (timestamp):", startDateTimestamp);
-        console.log("Fecha final (timestamp):", endDateTimestamp);
+        const fechaInicio = new Date(fechaHoraInicio).toISOString().slice(0, 19).replace('T', ' ');
+        const fechaFin = new Date(fechaHoraFin).toISOString().slice(0, 19).replace('T', ' ');
 
-        // Aplicar el filtro de fechas a la capa utilizando timestamps
-        var definitionExpression = `FechaRecepcion >= ${startDateTimestamp} AND FechaRecepcion <= ${endDateTimestamp}`;
-        featureLayer.definitionExpression = definitionExpression;
+        const url = "https://proyectos-seynekun.co/server/rest/services/SeguridadFisica/SF_PuntosGNSS/FeatureServer/0/query";
+        const whereClause = `FechaRecepcion BETWEEN DATE '${fechaInicio}' AND DATE '${fechaFin}'`;
 
-        // Verificar que se aplique la expresión
-        console.log("Aplicando filtro con la definición:", definitionExpression);
+        const params = new URLSearchParams({
+            where: whereClause,
+            outFields: "*",
+            f: "json"
+        });
 
-        // Refrescar la capa para aplicar el filtro
-        featureLayer.refresh();
+        function agruparPuntosPorIDGPS(data) {
+            const agrupados = {};
+            data.features.forEach(feature => {
+                const idGPS = feature.attributes.ESN;
+                if (agrupados[idGPS]) {
+                    agrupados[idGPS]++;
+                } else {
+                    agrupados[idGPS] = 1;
+                }
+            });
+            return agrupados;
+        }
+
+        function mostrarResultadosEnModal(agrupados) {
+            const modal = document.getElementById('myModal');
+            const tabla = document.getElementById('tablaResultados');
+            tabla.innerHTML = "<tr><th>ID GPS</th><th>Número de Puntos</th></tr>";
+
+            for (const idGPS in agrupados) {
+                const numPuntos = agrupados[idGPS];
+                tabla.innerHTML += `<tr><td>${idGPS}</td><td>${numPuntos}</td></tr>`;
+            }
+
+            modal.style.display = "block";
+        }
+
+        fetch(`${url}?${params}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Datos recibidos: ", data);
+
+                if (data.features && data.features.length > 0) {
+                    const agrupados = agruparPuntosPorIDGPS(data);
+                    mostrarResultadosEnModal(agrupados);
+                    mostrarPuntosEnMapa(data.features);  // Mostrar puntos en el mapa
+                } else {
+                    alert("No se encontraron resultados para esta fecha y rango de horas.");
+                }
+            })
+            .catch(error => {
+                console.error("Error en la consulta:", error);
+                alert(`Ocurrió un error al realizar la consulta: ${error.message}`);
+            });
     });
 
-    // Cargar el mapa
-    require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer"
-    ], function (Map, MapView, FeatureLayer) {
+    document.getElementById('cerrarModal').addEventListener('click', function() {
+        document.getElementById('myModal').style.display = "none";
+    });
 
-        // Crear el mapa base
-        var map = new Map({
-            basemap: "topo-vector"
-        });
+    function mostrarPuntosEnMapa(features) {
+        const idsGPS = features.map(f => f.attributes.ESN); // Obtenemos los ID GPS (ESN) de las características
+        view.graphics.removeAll();
 
-        // Crear la vista del mapa
-        var view = new MapView({
-            container: "viewDiv", // ID del contenedor en el HTML
-            map: map,
-            center: [-74.08175, 4.60971], // Coordenadas iniciales (Bogotá)
-            zoom: 12
-        });
+        features.forEach((feature) => {
+            const point = {
+                type: "point",
+                longitude: feature.geometry.x,
+                latitude: feature.geometry.y
+            };
+            
+            const symbol = {
+                type: "simple-marker",
+                color: [226, 119, 40],
+                outline: {
+                    color: [255, 255, 255],
+                    width: 2
+                }
+            };
+            
+            const graphic = new Graphic({
+                geometry: point,
+                symbol: symbol,
+                attributes: feature.attributes,
+                popupTemplate: {
+                    title: `Punto GNSS - ${feature.attributes.ESN}`,
+                    content: `Fecha de Recepción: {FechaRecepcion}`
+                }
+            });
 
-        // URL del servicio
-        var urlService = "https://proyectos-seynekun.co/server/rest/services/SeguridadFisica/SF_PuntosGNSS/FeatureServer/0";
-
-        // Definir la capa de entidades
-        featureLayer = new FeatureLayer({
-            url: urlService,
-            outFields: ["*"], // Obtener todos los campos
-            popupTemplate: {
-                title: "Punto GNSS - {ESN}",
-                content: "Fecha de recepción: {FechaRecepcion}"
+            if (idsGPS.includes(feature.attributes.ESN)) {
+                view.graphics.add(graphic);
             }
         });
-
-        // Añadir la capa de entidades al mapa
-        map.add(featureLayer);
-    });
+    }
 });
