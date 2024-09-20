@@ -38,6 +38,7 @@ Tecnologías Utilizadas
   * El proyecto está diseñado para interactuar con un servicio de datos GNSS. Asegúrate de que el servicio esté disponible y correctamente configurado en la URL proporcionada en el archivo main.js.
 
   * En el archivo main.js, se especifica la URL del servicio de puntos GNSS:
+    
                                                                             var urlService = "https://proyectos-seynekun.co/server/rest/services/SeguridadFisica/SF_PuntosGNSS/FeatureServer/0";
                                                                                         Si deseas utilizar un servicio diferente, actualiza esta URL en tu archivo JavaScript.
 
