@@ -1,85 +1,130 @@
-/* General styles */
-body {
-    font-family: Arial, sans-serif;
+/* Estilos generales */
+body, html {
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
-header {
+/* Banner superior */
+.banner {
     background-color: #333;
     color: white;
-    padding: 10px;
     text-align: center;
+    padding: 20px;
+    font-size: 24px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Contenedor principal */
 .container {
     display: flex;
-    flex: 1;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 80px); /* Descontamos el tamaño del banner */
+    width: 100%;
 }
 
-/* Sidebar izquierda */
+/* Barra lateral */
 .sidebar {
     width: 300px;
     background-color: #f4f4f4;
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar label {
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.sidebar input {
-    margin-bottom: 20px;
-    padding: 10px;
-    font-size: 16px;
+/* Inputs de fecha y hora */
+input[type="datetime-local"] {
     width: 100%;
-    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-/* Botón consultar */
-#consultarBtn {
+/* Botón de consultar */
+button {
     background-color: green;
     color: white;
-    padding: 10px;
     border: none;
+    padding: 10px;
     cursor: pointer;
     font-size: 16px;
+    border-radius: 5px;
     width: 100%;
+    margin-top: 10px;
 }
 
-#consultarBtn:hover {
+button:hover {
     background-color: darkgreen;
 }
 
-/* Mapa */
-.map {
-    flex: 1;
-    height: 100%;
-    width: 100%;
-    border-left: 2px solid #ddd;
+/* Contenido principal */
+.main-content {
+    flex-grow: 1;
+    background-color: white;
+    position: relative;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        padding: 10px;
-    }
-    
-    .map {
-        height: 50vh;
-    }
+/* Estilo para el mapa */
+.map {
+    width: 100%;
+    height: 100%;
+}
 
-    header {
-        font-size: 18px;
-    }
+/* Estilo del modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Fondo oscuro */
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+}
+
+/* Botón de cerrar modal */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
 }
