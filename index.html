@@ -5,35 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geovisor - Puntos GNSS</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <!-- Cargar la API de ArcGIS -->
+    <!-- Incluimos la API de ArcGIS -->
     <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
     <script src="https://js.arcgis.com/4.27/"></script>
 </head>
 <body>
-    <!-- Banner superior -->
-    <header>
+
+    <div class="banner">
         <h1>Geovisor - Puntos GNSS</h1>
-    </header>
+    </div>
 
-    <!-- Contenedor principal -->
     <div class="container">
-        <!-- Barra lateral izquierda -->
         <div class="sidebar">
-            <label for="startDate">Fecha y hora inicial</label>
-            <input type="text" id="startDate">
+            <label for="fechaInicio">Fecha y hora inicial</label>
+            <input type="datetime-local" id="fechaInicio" name="fechaInicio">
 
-            <label for="endDate">Fecha y hora final</label>
-            <input type="text" id="endDate">
+            <label for="fechaFin">Fecha y hora final</label>
+            <input type="datetime-local" id="fechaFin" name="fechaFin">
 
             <button id="consultarBtn">Consultar</button>
         </div>
+        <div class="main-content">
+            <div id="map" class="map"></div> <!-- Aquí va el mapa -->
+        </div>
+    </div>
 
-        <!-- Contenedor del mapa -->
-        <div id="viewDiv" class="map"></div>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span id="cerrarModal" class="close">&times;</span>
+            <h2>Resultados de la Consulta</h2>
+            <table id="tablaResultados"></table>
+        </div>
     </div>
 
     <script src="main.js"></script>
 </body>
 </html>
+
