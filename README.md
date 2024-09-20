@@ -26,14 +26,14 @@ Tecnologías Utilizadas
 
   Instalación
     Clonar el repositorio:
-                            git clone https://github.com/tu_usuario/geovisor-gnss.git
-                            cd geovisor-gnss
+    git clone https://github.com/tu_usuario/geovisor-gnss.git
+    cd geovisor-gnss
   Instalar dependencias:
 
-                                              Este proyecto no requiere la instalación de dependencias adicionales, ya que utiliza bibliotecas cargadas desde CDNs.
+ Este proyecto no requiere la instalación de dependencias adicionales, ya que utiliza bibliotecas cargadas desde CDNs.
 
-          Ejecutar localmente:
-          Puedes simplemente abrir el archivo index.html en tu navegador para ver el proyecto en funcionamiento.
+  Ejecutar localmente:
+  Puedes simplemente abrir el archivo index.html en tu navegador para ver el proyecto en funcionamiento.
   Configuración
   * El proyecto está diseñado para interactuar con un servicio de datos GNSS. Asegúrate de que el servicio esté disponible y correctamente configurado en la URL proporcionada en el archivo main.js.
 
