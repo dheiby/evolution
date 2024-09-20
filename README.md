@@ -4,13 +4,6 @@ Portal de visualización y consulta de base datos ESRI en API de java para ESRI
 Geovisor - Puntos GNSS
 Este proyecto es un geovisor diseñado para visualizar puntos GNSS en un mapa, permitiendo a los usuarios filtrar los puntos por rangos de fechas y horas específicas. Está construido utilizando la API de ArcGIS para JavaScript, Flatpickr para la selección de fechas, y estilos personalizados en CSS. El sistema interactúa con un servicio de datos de puntos GNSS para consultar los datos según los filtros seleccionados por el usuario.
 
-* Tabla de Contenidos
-* Características
-* Tecnologías Utilizadas
-* Instalación
-* Configuración
-* Uso
-
 Características
 * Visualización de puntos GNSS: Los puntos se muestran en un mapa interactivo utilizando la API de ArcGIS.
 * Filtrado por fecha y hora: Los usuarios pueden filtrar los puntos GNSS por un rango de fechas y horas usando un selector de fechas en formato de 24 horas.
@@ -40,7 +33,7 @@ Tecnologías Utilizadas
   * En el archivo main.js, se especifica la URL del servicio de puntos GNSS:
     
                                                                             var urlService = "https://proyectos-seynekun.co/server/rest/services/SeguridadFisica/SF_PuntosGNSS/FeatureServer/0";
-                                                                                        Si deseas utilizar un servicio diferente, actualiza esta URL en tu archivo JavaScript.
+     Si deseas utilizar un servicio diferente, actualiza esta URL en tu archivo JavaScript.
 
     Uso
 1. Seleccionar las fechas y horas:
