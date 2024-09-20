@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geovisor - Puntos GNSS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Cargar la API de ArcGIS -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.27/"></script>
+</head>
+<body>
+    <!-- Banner superior -->
+    <header>
+        <h1>Geovisor - Puntos GNSS</h1>
+    </header>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Barra lateral izquierda -->
+        <div class="sidebar">
+            <label for="startDate">Fecha y hora inicial</label>
+            <input type="text" id="startDate">
+
+            <label for="endDate">Fecha y hora final</label>
+            <input type="text" id="endDate">
+
+            <button id="consultarBtn">Consultar</button>
+        </div>
+
+        <!-- Contenedor del mapa -->
+        <div id="viewDiv" class="map"></div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
