@@ -19,7 +19,7 @@ Tecnologías Utilizadas
 
   Instalación
     Clonar el repositorio:
-    git clone https://github.com/tu_usuario/geovisor-gnss.git
+    git clone https://github.com/dheiby/evolution
     cd geovisor-gnss
   Instalar dependencias:
 
